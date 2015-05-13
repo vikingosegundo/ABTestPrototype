@@ -46,12 +46,12 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
         
         OCFWebServer *server = [OCFWebServer new];
         
-        [server addDefaultHandlerForMethod:@"GET"
-                              requestClass:[OCFWebServerRequest class]
-                              processBlock:^void(OCFWebServerRequest *request) {
-                                  OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
-                                  [request respondWith:response];
-                              }];
+//        [server addDefaultHandlerForMethod:@"GET"
+//                              requestClass:[OCFWebServerRequest class]
+//                              processBlock:^void(OCFWebServerRequest *request) {
+//                                  OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
+//                                  [request respondWith:response];
+//                              }];
         
         [server addHandlerForMethod:@"GET"
                           pathRegex:@"/color/[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}/"
