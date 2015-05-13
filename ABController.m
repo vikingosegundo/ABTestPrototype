@@ -1,4 +1,4 @@
-//
+    //
 //  ABController.m
 //  ABTestPrototype
 //
@@ -9,9 +9,8 @@
 #import "ABController.h"
 
 #import <Aspects/Aspects.h>
-#import <OCFWebServer/OCFWebServer.h>
-#import <OCFWebServer/OCFWebServerRequest.h>
-#import <OCFWebServer/OCFWebServerResponse.h>
+#import <OCFWeb/OCFWebApplication.h>
+#import <OCFWeb/OCFRequest.h>
 
 
 #import <objc/runtime.h>
@@ -22,18 +21,18 @@
 @import UIKit;
 
 @interface ABController ()
-@property (nonatomic, strong) OCFWebServer *webserver;
+@property (nonatomic, strong) OCFWebApplication *webApp;
 @end
 @implementation ABController
 
 
 void _ab_register_ab_notificaction(id self, SEL _cmd)
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:NSSelectorFromString(@"ab_notifaction") name:@"ABTestUpdate" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:NSSelectorFromString(@"ab_notifaction:") name:@"ABTestUpdate" object:nil];
 }
 
 
-void _ab_notificaction(id self, SEL _cmd)
+void _ab_notificaction(id self, SEL _cmd, id userObj)
 {
     NSLog(@"UPDATE %@", self);
 }
@@ -43,44 +42,49 @@ void _ab_notificaction(id self, SEL _cmd)
     static ABController *abController;
     dispatch_once(&onceToken, ^{
         
-        OCFWebServer *server = [OCFWebServer new];
+        OCFWebApplication *app = [OCFWebApplication new];
         
-        [server addDefaultHandlerForMethod:@"GET"
-                              requestClass:[OCFWebServerRequest class]
-                              processBlock:^void(OCFWebServerRequest *request) {
-                                  OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
-                                  [request respondWith:response];
-                              }];
+        // Add a handler for GET requests
+
         
-        [server runWithPort:8080];
+        app[@"GET"][@"/color/:color/"]  = ^(OCFRequest *request) {
+            // request contains a lot of properties which describe the incoming request.
+            // Respond to the request:
+            [[UIApplication sharedApplication].keyWindow.rootViewController.view setBackgroundColor:[UIColor greenColor]];
+            request.respondWith(@"Hello World");
+        };
+        
+        app[@"GET"][@"/"]  = ^(OCFRequest *request) {
+            request.respondWith(@"Hello World");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ABTestUpdate" object:[UIColor greenColor]];
+            
+        };
+        app[@"GET"][@"/countries/:country/states/:state/cities/:city/bla/:b/"] = ^(OCFRequest *request) {
+            request.respondWith([request.parameters description]);
+        };
+        
+        [app run];
         
         
-        abController = [[ABController alloc] initWithWebServer:server];
+        abController = [[ABController alloc] initWithWebApp:app];
     });
     return abController;
 }
 
--(instancetype)initWithWebServer:(OCFWebServer *)webserver
+-(instancetype)initWithWebApp:(OCFWebApplication *)webApp
 {
     self = [super init];
     if (self) {
-        self.webserver = webserver;
+        self.webApp = webApp;
     }
     return self;
 }
 
-+(NSDictionary *)attributesOfView:(UIView *)view
-{
-    NSMutableDictionary *dict = [@{} mutableCopy];
-
-    dict[@"frame"] = NSStringFromCGRect(view.frame);
-    
-    return [dict copy];
-}
 
 +(void)load
 {
-    class_addMethod([UIViewController class], NSSelectorFromString(@"ab_notifaction"), (IMP)_ab_notificaction, "v@:");
+    class_addMethod([UIViewController class], NSSelectorFromString(@"ab_notifaction:"), (IMP)_ab_notificaction, "v@:@");
     class_addMethod([UIViewController class], NSSelectorFromString(@"ab_register_notifaction"), (IMP)_ab_register_ab_notificaction, "v@:");
     
 //    [self sharedABController];
@@ -98,17 +102,14 @@ void _ab_notificaction(id self, SEL _cmd)
                                    func(vc, selector);
       } error:NULL];
     
-    [UIViewController aspect_hookSelector:NSSelectorFromString(@"ab_notifaction")
+    [UIViewController aspect_hookSelector:NSSelectorFromString(@"ab_notifaction:")
                               withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo) {
+                               usingBlock:^(id<AspectInfo> aspectInfo, NSNotification *noti) {
                                    UIViewController *vc = aspectInfo.instance;
-                                   [vc updateViewWithAttributes:@{@"backgroundColor": [UIColor orangeColor]}];
+                                   [vc updateViewWithAttributes:@{@"backgroundColor": noti.object}];
     } error:NULL];
     
     
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ABTestUpdate" object:nil];
-    });
 }
 @end

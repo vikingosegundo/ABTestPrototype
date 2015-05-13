@@ -11,11 +11,13 @@
 @implementation UIViewController (Updating)
 -(void)updateViewWithAttributes:(NSDictionary *)attributes
 {
-    [[attributes allKeys] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        
-        if ([obj isEqualToString:@"backgroundColor"]) {
-            [self.view setBackgroundColor:attributes[obj]];
-        }
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[attributes allKeys] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
+            
+            if ([obj isEqualToString:@"backgroundColor"]) {
+                [self.view setBackgroundColor:attributes[obj]];
+            }
+        }];
+    });
 }
 @end
