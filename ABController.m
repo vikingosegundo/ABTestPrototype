@@ -45,13 +45,15 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
     dispatch_once(&onceToken, ^{
         
         OCFWebServer *server = [OCFWebServer new];
-        
-//        [server addDefaultHandlerForMethod:@"GET"
-//                              requestClass:[OCFWebServerRequest class]
-//                              processBlock:^void(OCFWebServerRequest *request) {
-//                                  OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
-//                                  [request respondWith:response];
-//                              }];
+        dispatch_queue_t abNetworkingQueue = dispatch_queue_create("ab.networking",NULL);
+
+        [server addHandlerForMethod:@"GET"
+                               path:@"/"
+                              requestClass:[OCFWebServerRequest class]
+                              processBlock:^void(OCFWebServerRequest *request) {
+                                  OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
+                                  [request respondWith:response];
+                              }];
         
         [server addHandlerForMethod:@"GET"
                           pathRegex:@"/color/[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}/"
@@ -68,7 +70,22 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                            [request respondWith:response];
                        }];
         
-        dispatch_async(dispatch_queue_create(".", 0), ^{
+        [server addHandlerForMethod:@"GET"
+                               path:@"/screenshot/"
+                       requestClass:[OCFWebServerRequest class]
+                       processBlock:^void(OCFWebServerRequest *request) {
+                           __block OCFWebServerResponse *response;
+                           dispatch_sync(dispatch_get_main_queue(), ^{
+                               UIImage *img = [[[UIApplication sharedApplication] keyWindow] ab_takeSnapshot];
+                               NSData *pngData = UIImagePNGRepresentation(img);
+                               response = [OCFWebServerDataResponse responseWithData:pngData
+                                                                         contentType:@"image/png"];
+                           });
+                           [request respondWith:response];
+                           
+                       }];
+        
+        dispatch_async(abNetworkingQueue, ^{
             [server runWithPort:8080];
         });
         
