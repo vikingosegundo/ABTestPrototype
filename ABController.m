@@ -17,6 +17,7 @@
 #import <objc/runtime.h>
 #import "UIViewController+Updating.h"
 #import "UIView+ABTesting.h"
+#import "UIColor+Creation.h"
 
 
 @import UIKit;
@@ -104,6 +105,53 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                            [request respondWith:response];
                        }];
         
+        
+        [server addHandlerForMethod:@"GET"
+                               path:@"/color/"
+                       requestClass:[OCFWebServerRequest class]
+                       processBlock:^(OCFWebServerRequest *request)
+         {
+             OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithHTML:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
+                                               Select your favorite color:\
+                                               <input type=\"color\" name=\"color\" onchange=\"this.form.submit()\">\
+                                               </form>"];
+             
+             [request respondWith:response];
+        }];
+        
+        
+        [server addHandlerForMethod:@"POST"
+                               path:@"/color/"
+                       requestClass:[OCFWebServerURLEncodedFormRequest class]
+                       processBlock:^(OCFWebServerRequest *request)
+         {
+             
+             
+             OCFWebServerURLEncodedFormRequest *formRequest = (OCFWebServerURLEncodedFormRequest *)request;
+             
+             NSString *colorString = [formRequest arguments][@"color"];
+             NSLog(@"%@", [formRequest arguments]);
+             
+             NSString *html;
+             
+             if (colorString) {
+                 UIColor *color = [UIColor colorFromHexString:colorString];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ABTestUpdate" object:color];
+                 html = [NSString stringWithFormat:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
+                         Select your favorite color:\
+                         <input type=\"color\" name=\"color\" value=\"%@\"onchange=\"this.form.submit()\">\
+                         </form>", colorString];
+             } else {
+                 html = [NSString stringWithFormat:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
+                         Select your favorite color:\
+                         <input type=\"color\" name=\"color\" value=\"#778899\"onchange=\"this.form.submit()\">\
+                         </form>"];
+             }
+            
+             OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithHTML:html];
+             [request respondWith:response];
+         }];
+        
         [server startWithPort:8080
                   bonjourName:^{
                       NSString *appName     = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
@@ -111,6 +159,8 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                       } else { appName      = [NSString stringWithFormat:@"%@", [[UIDevice currentDevice] name]]; }
                       return appName;
                   }()];
+        
+        
         
         abController = [[ABController alloc] initWithWebServer:server];
     });
