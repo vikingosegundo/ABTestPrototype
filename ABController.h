@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+@class OCFWebServer;
 
 @interface ABController : NSObject
+-(instancetype)initWithWebServer:(OCFWebServer *)webserver;
+
++(instancetype)sharedABController;
 
 @end
