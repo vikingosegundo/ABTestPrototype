@@ -22,4 +22,4 @@ server to receive changes.
 ![change colors via network][2]
 
 [1]: http://stackoverflow.com/questions/29879195/how-does-apptimize-optimizely-work-on-ios/30194771#30194771
-[2]: changecolors.gif
+[2]: changecolors2.gif
