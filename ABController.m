@@ -105,9 +105,10 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                        }];
         
         [server startWithPort:8080
-                  bonjourName:^{ NSString *appName = (NSString *)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-                      if(appName){ appName = [NSString stringWithFormat:@"%@: %@", appName, @"ABController"];
-                      } else { appName = @"ABController"; }
+                  bonjourName:^{
+                      NSString *appName     = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+                      if(appName){ appName  = [NSString stringWithFormat:@"%@: %@", [[UIDevice currentDevice] name],appName];
+                      } else { appName      = [NSString stringWithFormat:@"%@", [[UIDevice currentDevice] name]]; }
                       return appName;
                   }()];
         
