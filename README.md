@@ -16,4 +16,4 @@ This is not a ready to use SDK and probably never will be. But who knows for sur
   
 
 
-[1]; http://stackoverflow.com/questions/29879195/how-does-apptimize-optimizely-work-on-ios/30194771#30194771
+[1]: http://stackoverflow.com/questions/29879195/how-does-apptimize-optimizely-work-on-ios/30194771#30194771
