@@ -12,10 +12,8 @@
 -(void)updateViewWithAttributes:(NSDictionary *)attributes
 {
     [[attributes allKeys] enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL *stop) {
-        
-        if ([obj isEqualToString:@"backgroundColor"]) {
-            
-                [self.view setBackgroundColor:attributes[obj]];
+            if ([obj isEqualToString:@"backgroundColor"]) {
+            [self.view setBackgroundColor:attributes[obj]];
         }
     }];
 }

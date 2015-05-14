@@ -58,15 +58,17 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
     dispatch_once(&onceToken, ^{
         
         OCFWebServer *server = [OCFWebServer new];
-        dispatch_queue_t abNetworkingQueue = dispatch_queue_create("ab.networking",NULL);
-
+        
+        OCFWebServerResponse *(^responseWithViewHierachy)(void) = ^OCFWebServerResponse* {
+            return [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
+        };
+        
         [server addHandlerForMethod:@"GET"
                                path:@"/"
-                              requestClass:[OCFWebServerRequest class]
-                              processBlock:^void(OCFWebServerRequest *request) {
-                                  OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
-                                  [request respondWith:response];
-                              }];
+                       requestClass:[OCFWebServerRequest class]
+                       processBlock:^void(OCFWebServerRequest *request) {
+                           [request respondWith:responseWithViewHierachy()];
+                       }];
         
         [server addHandlerForMethod:@"GET"
                           pathRegex:@"/color/[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}/$"
@@ -85,8 +87,7 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                                                         alpha:1.0];
                            
                            [[NSNotificationCenter defaultCenter] postNotificationName:@"ABTestUpdate" object:c];
-                           OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
-                           [request respondWith:response];
+                           [request respondWith:responseWithViewHierachy()];
                        }];
         
         [server addHandlerForMethod:@"GET"
@@ -103,9 +104,12 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                            [request respondWith:response];
                        }];
         
-        dispatch_async(abNetworkingQueue, ^{
-            [server runWithPort:8080];
-        });
+        [server startWithPort:8080
+                  bonjourName:^{ NSString *appName = (NSString *)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+                      if(appName){ appName = [NSString stringWithFormat:@"%@: %@", appName, @"ABController"];
+                      } else { appName = @"ABController"; }
+                      return appName;
+                  }()];
         
         abController = [[ABController alloc] initWithWebServer:server];
     });
