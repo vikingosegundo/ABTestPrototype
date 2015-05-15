@@ -42,11 +42,51 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
     NSLog(@"UPDATE %@", self);
 }
 
++(void)load
+{
+    class_addMethod([UIViewController class], NSSelectorFromString(@"ab_notifaction:"), (IMP)_ab_notificaction, "v@:@");
+    class_addMethod([UIViewController class], NSSelectorFromString(@"ab_register_ab_notificaction"), (IMP)_ab_register_ab_notificaction, "v@:");
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.00001 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self sharedABController];
+    });
+    
+    [UIViewController aspect_hookSelector:@selector(viewDidLoad)
+                              withOptions:AspectPositionAfter
+                               usingBlock:^(id<AspectInfo> aspectInfo) {
+                                   UIViewController *vc = aspectInfo.instance;
+                                   SEL selector = NSSelectorFromString(@"ab_register_ab_notificaction");
+                                   IMP imp = [vc methodForSelector:selector];
+                                   void (*func)(id, SEL) = (void *)imp;func(vc, selector);
+                               } error:NULL];
+    
+    [UIViewController aspect_hookSelector:NSSelectorFromString(@"ab_notifaction:")
+                              withOptions:AspectPositionAfter
+                               usingBlock:^(id<AspectInfo> aspectInfo, NSNotification *noti) {
+                                   dispatch_async(dispatch_get_main_queue(),
+                                                  ^{
+                                                      UIViewController *vc = aspectInfo.instance;
+                                                      [vc updateViewWithAttributes:@{@"backgroundColor": noti.object}];
+                                                  });
+                               } error:NULL];
+}
+
+
 -(instancetype)initWithWebServer:(OCFWebServer *)webserver
 {
     self = [super init];
     if (self) {
         self.webserver = webserver;
+        [self startServer];
+        
+        void (^registerNotification)(SEL, NSString *) = ^(SEL selector, NSString *name){
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:selector
+                                                         name:name
+                                                       object:nil];
+        };
+        registerNotification(@selector(startServer), UIApplicationDidBecomeActiveNotification);
+        registerNotification(@selector(stopServer),  UIApplicationDidEnterBackgroundNotification);
     }
     return self;
 }
@@ -130,8 +170,6 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
              OCFWebServerURLEncodedFormRequest *formRequest = (OCFWebServerURLEncodedFormRequest *)request;
              
              NSString *colorString = [formRequest arguments][@"color"];
-             NSLog(@"%@", [formRequest arguments]);
-             
              NSString *html;
              
              if (colorString) {
@@ -152,49 +190,36 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
              [request respondWith:response];
          }];
         
-        [server startWithPort:8080
-                  bonjourName:^{
-                      NSString *appName     = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-                      if(appName){ appName  = [NSString stringWithFormat:@"%@: %@", [[UIDevice currentDevice] name],appName];
-                      } else { appName      = [NSString stringWithFormat:@"%@", [[UIDevice currentDevice] name]]; }
-                      return appName;
-                  }()];
-        
-        
-        
         abController = [[ABController alloc] initWithWebServer:server];
     });
     return abController;
 }
 
-
-+(void)load
+-(void)dealloc
 {
-    class_addMethod([UIViewController class], NSSelectorFromString(@"ab_notifaction:"), (IMP)_ab_notificaction, "v@:@");
-    class_addMethod([UIViewController class], NSSelectorFromString(@"ab_register_ab_notificaction"), (IMP)_ab_register_ab_notificaction, "v@:");
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.00001 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self sharedABController];
-    });
-    
-    [UIViewController aspect_hookSelector:@selector(viewDidLoad)
-                              withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo) {
-                                   UIViewController *vc = aspectInfo.instance;
-                                   SEL selector = NSSelectorFromString(@"ab_register_ab_notificaction");
-                                   IMP imp = [vc methodForSelector:selector];
-                                   void (*func)(id, SEL) = (void *)imp;func(vc, selector);
-                               } error:NULL];
-    
-    [UIViewController aspect_hookSelector:NSSelectorFromString(@"ab_notifaction:")
-                              withOptions:AspectPositionAfter
-                               usingBlock:^(id<AspectInfo> aspectInfo, NSNotification *noti) {
-                                   dispatch_async(dispatch_get_main_queue(),
-                                                  ^{
-                                                      UIViewController *vc = aspectInfo.instance;
-                                                      [vc updateViewWithAttributes:@{@"backgroundColor": noti.object}];
-                                                  });
-                               } error:NULL];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+
+-(void)startServer
+{
+    if(![self.webserver isRunning]){
+        [self.webserver startWithPort:8080
+                          bonjourName:^{
+                              NSString *appName     = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+                              if(appName){ appName  = [NSString stringWithFormat:@"%@: %@", [[UIDevice currentDevice] name],appName];
+                              } else { appName      = [NSString stringWithFormat:@"%@", [[UIDevice currentDevice] name]]; }
+                              return appName;
+                          }()];
+    }
+}
+
+-(void)stopServer
+{
+    if([self.webserver isRunning]){
+        [self.webserver stop];
+    }
+}
+
 
 @end
