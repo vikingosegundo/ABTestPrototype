@@ -171,6 +171,9 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
              
              NSString *colorString = [formRequest arguments][@"color"];
              NSString *html;
+             CGFloat imgWidth = [[UIScreen mainScreen] bounds].size.width;
+             CGFloat imgheight = [[UIScreen mainScreen] bounds].size.height;
+
              
              if (colorString) {
                  UIColor *color = [UIColor colorFromHexString:colorString];
@@ -178,12 +181,12 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                  html = [NSString stringWithFormat:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
                          Select your favorite color:\
                          <input type=\"color\" name=\"color\" value=\"%@\"onchange=\"this.form.submit()\">\
-                         </form>", colorString];
+                         </form><img src=\"/screenshot/\" width=\"%f\" height=\"%f\">", colorString, imgWidth, imgheight];
              } else {
                  html = [NSString stringWithFormat:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
                          Select your favorite color:\
                          <input type=\"color\" name=\"color\" value=\"#778899\"onchange=\"this.form.submit()\">\
-                         </form>"];
+                         </form><img src=\"/screenshot/\" width=\"%f\" height=\"%f\">", imgWidth, imgheight];
              }
             
              OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithHTML:html];
