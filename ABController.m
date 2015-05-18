@@ -66,7 +66,11 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                                    dispatch_async(dispatch_get_main_queue(),
                                                   ^{
                                                       UIViewController *vc = aspectInfo.instance;
-                                                      [vc updateViewWithAttributes:@{@"backgroundColor": noti.object}];
+                                                      
+                                                      if (vc.isViewLoaded && vc.view.window) {
+                                                          [vc updateViewWithAttributes:@{@"backgroundColor": noti.object}];
+                                                      }
+
                                                   });
                                } error:NULL];
 }
