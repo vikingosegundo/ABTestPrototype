@@ -162,6 +162,16 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
              
              [request respondWith:response];
         }];
+        NSString *jqueryPath = [[NSBundle mainBundle] pathForResource:@"jquery" ofType:@"js"];
+
+        [server addHandlerForMethod:@"GET"
+                               path:jqueryPath
+                       requestClass:[OCFWebServerRequest class]
+                       processBlock:^(OCFWebServerRequest *request) {
+                           NSData *jqfile = [NSData dataWithContentsOfFile:jqueryPath];
+                           OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithData:jqfile contentType:@"application/javascript"];
+                           [request respondWith:response];
+                       }];
         
         
         [server addHandlerForMethod:@"POST"
@@ -175,22 +185,40 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
              
              NSString *colorString = [formRequest arguments][@"color"];
              NSString *html;
-             CGFloat imgWidth = [[UIScreen mainScreen] bounds].size.width;
+             CGFloat imgWidth = [[UIScreen mainScreen] bounds].size.width ;
              CGFloat imgheight = [[UIScreen mainScreen] bounds].size.height;
 
-             
+             NSLog(@"%@", jqueryPath);
              if (colorString) {
                  UIColor *color = [UIColor colorFromHexString:colorString];
                  [[NSNotificationCenter defaultCenter] postNotificationName:@"ABTestUpdate" object:color];
-                 html = [NSString stringWithFormat:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
+                 html = [NSString stringWithFormat:@"<html><head><script type='text/javascript' src='%@'></script></head><body><form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
                          Select your favorite color:\
                          <input type=\"color\" name=\"color\" value=\"%@\"onchange=\"this.form.submit()\">\
-                         </form><img src=\"/screenshot/\" width=\"%f\" height=\"%f\">", colorString, imgWidth, imgheight];
+                         </form><div id=\"C\" style=\"width:%f; height:%f\"><img width=\"%f\" height=\"%f\"  src=\"/screenshot/\"></div><script type='text/javascript'>\
+                         $(window).load(function(){\
+                         $(document).ready(function(e) {\
+                         $('#C').click(function(e) {\
+                         var posX = $(this).position().left,posY = $(this).position().top;\
+                         alert( (e.pageX - posX) + ' , ' + (e.pageY - posY));\
+                         });\
+                         });\
+                         });\
+                         </script></body></html>",jqueryPath, colorString,imgWidth, imgheight,imgWidth, imgheight];
              } else {
-                 html = [NSString stringWithFormat:@"<form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
+                 html = [NSString stringWithFormat:@"<html><head><script type='text/javascript' src='%@'></script></head><body><form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
                          Select your favorite color:\
                          <input type=\"color\" name=\"color\" value=\"#778899\"onchange=\"this.form.submit()\">\
-                         </form><img src=\"/screenshot/\" width=\"%f\" height=\"%f\">", imgWidth, imgheight];
+                         </form><div id=\"C\" style=\"width:%f; height:%f\"><img width=\"%f\" height=\"%f\" src=\"/screenshot/\"></div><script type='text/javascript'>\
+                         $(window).load(function(){\
+                     $(document).ready(function(e) {\
+                         $('#C').click(function(e) {\
+                             var posX = $(this).position().left,posY = $(this).position().top;\
+                             alert( (e.pageX - posX) + ' , ' + (e.pageY - posY));\
+                         });\
+                     });\
+                 });\
+                </script></body></html>", jqueryPath, imgWidth, imgheight, imgWidth, imgheight];
              }
             
              OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithHTML:html];

@@ -20,6 +20,7 @@
 		64647C881B02C0A700443777 /* UIView+ABTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 64647C871B02C0A700443777 /* UIView+ABTesting.m */; };
 		64BBDA931B044C8500465033 /* UIColor+Creation.m in Sources */ = {isa = PBXBuildFile; fileRef = 64BBDA921B044C8500465033 /* UIColor+Creation.m */; };
 		64CD0DB01B09DA1B00A94730 /* UIViewController+RecursiveDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */; };
+		64E555661B0A721400857C40 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 64E555651B0A721400857C40 /* jquery.js */; };
 		6C6561441626B914F2A40753 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2936CDBB8E5793172CD58B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		64BBDA921B044C8500465033 /* UIColor+Creation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Creation.m"; sourceTree = "<group>"; };
 		64CD0DAE1B09DA1B00A94730 /* UIViewController+RecursiveDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RecursiveDescription.h"; sourceTree = "<group>"; };
 		64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RecursiveDescription.m"; sourceTree = "<group>"; };
+		64E555651B0A721400857C40 /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
 		695192178DA6B3EF6092F0BB /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +88,7 @@
 		64647C0D1B026D6400443777 = {
 			isa = PBXGroup;
 			children = (
+				64E555651B0A721400857C40 /* jquery.js */,
 				64CD0DAE1B09DA1B00A94730 /* UIViewController+RecursiveDescription.h */,
 				64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */,
 				64BBDA911B044C8500465033 /* UIColor+Creation.h */,
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64E555661B0A721400857C40 /* jquery.js in Resources */,
 				64647C281B026D6400443777 /* Main.storyboard in Resources */,
 				64647C2D1B026D6400443777 /* LaunchScreen.xib in Resources */,
 				64647C2A1B026D6400443777 /* Images.xcassets in Resources */,
