@@ -15,11 +15,11 @@
 		64647C2A1B026D6400443777 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64647C291B026D6400443777 /* Images.xcassets */; };
 		64647C2D1B026D6400443777 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64647C2B1B026D6400443777 /* LaunchScreen.xib */; };
 		64647C391B026D6400443777 /* ABTestPrototypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 64647C381B026D6400443777 /* ABTestPrototypeTests.m */; };
-		64647C441B02751100443777 /* UIViewController+RecursiveDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 64647C431B02751100443777 /* UIViewController+RecursiveDescription.m */; };
 		64647C4A1B027CFF00443777 /* UIViewController+Updating.m in Sources */ = {isa = PBXBuildFile; fileRef = 64647C491B027CFF00443777 /* UIViewController+Updating.m */; };
 		64647C4D1B027FB800443777 /* ABController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64647C4C1B027FB800443777 /* ABController.m */; };
 		64647C881B02C0A700443777 /* UIView+ABTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 64647C871B02C0A700443777 /* UIView+ABTesting.m */; };
 		64BBDA931B044C8500465033 /* UIColor+Creation.m in Sources */ = {isa = PBXBuildFile; fileRef = 64BBDA921B044C8500465033 /* UIColor+Creation.m */; };
+		64CD0DB01B09DA1B00A94730 /* UIViewController+RecursiveDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */; };
 		6C6561441626B914F2A40753 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2936CDBB8E5793172CD58B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -51,8 +51,6 @@
 		64647C321B026D6400443777 /* ABTestPrototypeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ABTestPrototypeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		64647C371B026D6400443777 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64647C381B026D6400443777 /* ABTestPrototypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTestPrototypeTests.m; sourceTree = "<group>"; };
-		64647C421B02751100443777 /* UIViewController+RecursiveDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+RecursiveDescription.h"; path = "../../Downloads/UIViewController-RecursiveDescription-master/UIViewController+RecursiveDescription.h"; sourceTree = "<group>"; };
-		64647C431B02751100443777 /* UIViewController+RecursiveDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+RecursiveDescription.m"; path = "../../Downloads/UIViewController-RecursiveDescription-master/UIViewController+RecursiveDescription.m"; sourceTree = "<group>"; };
 		64647C481B027CFF00443777 /* UIViewController+Updating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Updating.h"; sourceTree = "<group>"; };
 		64647C491B027CFF00443777 /* UIViewController+Updating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Updating.m"; sourceTree = "<group>"; };
 		64647C4B1B027FB800443777 /* ABController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABController.h; sourceTree = "<group>"; };
@@ -61,6 +59,8 @@
 		64647C871B02C0A700443777 /* UIView+ABTesting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ABTesting.m"; sourceTree = "<group>"; };
 		64BBDA911B044C8500465033 /* UIColor+Creation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Creation.h"; sourceTree = "<group>"; };
 		64BBDA921B044C8500465033 /* UIColor+Creation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Creation.m"; sourceTree = "<group>"; };
+		64CD0DAE1B09DA1B00A94730 /* UIViewController+RecursiveDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RecursiveDescription.h"; sourceTree = "<group>"; };
+		64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RecursiveDescription.m"; sourceTree = "<group>"; };
 		695192178DA6B3EF6092F0BB /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +86,8 @@
 		64647C0D1B026D6400443777 = {
 			isa = PBXGroup;
 			children = (
+				64CD0DAE1B09DA1B00A94730 /* UIViewController+RecursiveDescription.h */,
+				64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */,
 				64BBDA911B044C8500465033 /* UIColor+Creation.h */,
 				64BBDA921B044C8500465033 /* UIColor+Creation.m */,
 				64647C861B02C0A700443777 /* UIView+ABTesting.h */,
@@ -94,8 +96,6 @@
 				64647C4C1B027FB800443777 /* ABController.m */,
 				64647C481B027CFF00443777 /* UIViewController+Updating.h */,
 				64647C491B027CFF00443777 /* UIViewController+Updating.m */,
-				64647C421B02751100443777 /* UIViewController+RecursiveDescription.h */,
-				64647C431B02751100443777 /* UIViewController+RecursiveDescription.m */,
 				64647C181B026D6400443777 /* ABTestPrototype */,
 				64647C351B026D6400443777 /* ABTestPrototypeTests */,
 				64647C171B026D6400443777 /* Products */,
@@ -311,12 +311,12 @@
 			files = (
 				64BBDA931B044C8500465033 /* UIColor+Creation.m in Sources */,
 				64647C881B02C0A700443777 /* UIView+ABTesting.m in Sources */,
-				64647C441B02751100443777 /* UIViewController+RecursiveDescription.m in Sources */,
 				64647C251B026D6400443777 /* SecondViewController.m in Sources */,
 				64647C4A1B027CFF00443777 /* UIViewController+Updating.m in Sources */,
 				64647C1F1B026D6400443777 /* AppDelegate.m in Sources */,
 				64647C4D1B027FB800443777 /* ABController.m in Sources */,
 				64647C221B026D6400443777 /* FirstViewController.m in Sources */,
+				64CD0DB01B09DA1B00A94730 /* UIViewController+RecursiveDescription.m in Sources */,
 				64647C1C1B026D6400443777 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
