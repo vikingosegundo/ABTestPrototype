@@ -17,6 +17,7 @@
 #import <objc/runtime.h>
 #import "UIViewController+Updating.h"
 #import "UIView+ABTesting.h"
+#import "UIView+Extra.h"
 #import "UIColor+Creation.h"
 
 
@@ -175,6 +176,23 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
         
         
         [server addHandlerForMethod:@"POST"
+                               path:@"/viewatposition/"
+                       requestClass:[OCFWebServerURLEncodedFormRequest class]
+                       processBlock:^(OCFWebServerRequest *request) {
+                           
+                           OCFWebServerURLEncodedFormRequest *formRequest = (OCFWebServerURLEncodedFormRequest *)request;
+                           id arg = [formRequest arguments];
+                           NSLog(@"%@", arg);
+                           CGFloat x = [arg[@"x"] floatValue];
+                           CGFloat y = [arg[@"y"] floatValue];
+                           NSLog(@"%f, %f", x,y);
+                           
+                           UIView *v =[[UIApplication sharedApplication].keyWindow.rootViewController.view findTopMostViewForPoint:CGPointMake(x, y)];
+                           OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithText:[NSString stringWithFormat:@"%@", v]];
+                           [request respondWith:response];
+                       }];
+        
+        [server addHandlerForMethod:@"POST"
                                path:@"/color/"
                        requestClass:[OCFWebServerURLEncodedFormRequest class]
                        processBlock:^(OCFWebServerRequest *request)
@@ -197,27 +215,31 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                          <input type=\"color\" name=\"color\" value=\"%@\"onchange=\"this.form.submit()\">\
                          </form><div id=\"C\" style=\"width:%f; height:%f\"><img width=\"%f\" height=\"%f\"  src=\"/screenshot/\"></div><script type='text/javascript'>\
                          $(window).load(function(){\
-                         $(document).ready(function(e) {\
-                         $('#C').click(function(e) {\
-                         var posX = $(this).position().left,posY = $(this).position().top;\
-                         alert( (e.pageX - posX) + ' , ' + (e.pageY - posY));\
-                         });\
-                         });\
+                            $(document).ready(function(e) {\
+                                $('#C').click(function(e) {\
+                                    var posX = $(this).position().left,posY = $(this).position().top;\
+                                    $.post('/viewatposition/', {'x':(e.pageX - posX), 'y':(e.pageY - posY)}, function(result){\
+                                        alert(result);\
+                                    });\
+                                });\
+                            });\
                          });\
                          </script></body></html>",jqueryPath, colorString,imgWidth, imgheight,imgWidth, imgheight];
              } else {
                  html = [NSString stringWithFormat:@"<html><head><script type='text/javascript' src='%@'></script></head><body><form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
                          Select your favorite color:\
                          <input type=\"color\" name=\"color\" value=\"#778899\"onchange=\"this.form.submit()\">\
-                         </form><div id=\"C\" style=\"width:%f; height:%f\"><img width=\"%f\" height=\"%f\" src=\"/screenshot/\"></div><script type='text/javascript'>\
+                         </form><div id=\"C\" style=\"width:%f; height:%f\"><img width=\"%f\" height=\"%f\"  src=\"/screenshot/\"></div><script type='text/javascript'>\
                          $(window).load(function(){\
-                     $(document).ready(function(e) {\
-                         $('#C').click(function(e) {\
-                             var posX = $(this).position().left,posY = $(this).position().top;\
-                             alert( (e.pageX - posX) + ' , ' + (e.pageY - posY));\
+                            $(document).ready(function(e) {\
+                                $('#C').click(function(e) {\
+                                    var posX = $(this).position().left,posY = $(this).position().top;\
+                                    $.post('/viewatposition/', {'x':(e.pageX - posX), 'y':(e.pageY - posY)}, function(result){\
+                                        alert(result);\
+                                    });\
+                                });\
+                            });\
                          });\
-                     });\
-                 });\
                 </script></body></html>", jqueryPath, imgWidth, imgheight, imgWidth, imgheight];
              }
             

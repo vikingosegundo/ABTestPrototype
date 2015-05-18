@@ -21,6 +21,7 @@
 		64BBDA931B044C8500465033 /* UIColor+Creation.m in Sources */ = {isa = PBXBuildFile; fileRef = 64BBDA921B044C8500465033 /* UIColor+Creation.m */; };
 		64CD0DB01B09DA1B00A94730 /* UIViewController+RecursiveDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */; };
 		64E555661B0A721400857C40 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 64E555651B0A721400857C40 /* jquery.js */; };
+		64E555691B0A8F1700857C40 /* UIView+Extra.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E555681B0A8F1700857C40 /* UIView+Extra.m */; };
 		6C6561441626B914F2A40753 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2936CDBB8E5793172CD58B /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,8 @@
 		64CD0DAE1B09DA1B00A94730 /* UIViewController+RecursiveDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+RecursiveDescription.h"; sourceTree = "<group>"; };
 		64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+RecursiveDescription.m"; sourceTree = "<group>"; };
 		64E555651B0A721400857C40 /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
+		64E555671B0A8F1700857C40 /* UIView+Extra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extra.h"; sourceTree = "<group>"; };
+		64E555681B0A8F1700857C40 /* UIView+Extra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extra.m"; sourceTree = "<group>"; };
 		695192178DA6B3EF6092F0BB /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,6 +91,8 @@
 		64647C0D1B026D6400443777 = {
 			isa = PBXGroup;
 			children = (
+				64E555671B0A8F1700857C40 /* UIView+Extra.h */,
+				64E555681B0A8F1700857C40 /* UIView+Extra.m */,
 				64E555651B0A721400857C40 /* jquery.js */,
 				64CD0DAE1B09DA1B00A94730 /* UIViewController+RecursiveDescription.h */,
 				64CD0DAF1B09DA1B00A94730 /* UIViewController+RecursiveDescription.m */,
@@ -316,6 +321,7 @@
 				64BBDA931B044C8500465033 /* UIColor+Creation.m in Sources */,
 				64647C881B02C0A700443777 /* UIView+ABTesting.m in Sources */,
 				64647C251B026D6400443777 /* SecondViewController.m in Sources */,
+				64E555691B0A8F1700857C40 /* UIView+Extra.m in Sources */,
 				64647C4A1B027CFF00443777 /* UIViewController+Updating.m in Sources */,
 				64647C1F1B026D6400443777 /* AppDelegate.m in Sources */,
 				64647C4D1B027FB800443777 /* ABController.m in Sources */,
