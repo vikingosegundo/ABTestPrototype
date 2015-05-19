@@ -78,7 +78,7 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
 {
   static dispatch_once_t onceToken;
   static ABController *abController;
-  dispatch_once(&onceToken, ^{    
+  dispatch_once(&onceToken, ^{
     abController = [[ABController alloc] initWithWebServer:[self attachHandlersToServer:[OCFWebServer new]]];
   });
   return abController;
@@ -139,7 +139,6 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
     appName = [NSString stringWithFormat:@"%@", [[UIDevice currentDevice] name]]; }
   return appName;
 }
-
 
 
 +(UIViewController *)topViewController
@@ -262,7 +261,6 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                    OCFWebServerResponse *response = [OCFWebServerDataResponse responseWithHTML:html];
                    [request respondWith:response];
                  }];
-  
   
   [server addHandlerForMethod:@"GET"
                     pathRegex:@"/color/[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}/$"
