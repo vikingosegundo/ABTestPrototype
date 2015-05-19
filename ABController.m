@@ -16,6 +16,7 @@
 
 #import <objc/runtime.h>
 #import "UIViewController+Updating.h"
+#import "UIViewController+TopViewController.h"
 #import "UIView+ABTesting.h"
 #import "UIView+Extra.h"
 #import "UIColor+Creation.h"
@@ -42,6 +43,7 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
 {
   NSLog(@"UPDATE %@", self);
 }
+
 
 +(void)load
 {
@@ -141,22 +143,6 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
 }
 
 
-+(UIViewController *)topViewController
-{
-  UIViewController *rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-  UIViewController *topController;
-  if ([rootViewController isKindOfClass:[UITabBarController class]]) {
-    topController = [(UITabBarController *)rootViewController selectedViewController];
-  } else {
-    topController = rootViewController;
-    while (topController.presentedViewController) {
-      topController = topController.presentedViewController;
-    }
-  }
-  return topController;
-}
-
-
 +(NSString *)htmlForColorRespondsWithColorString:(NSString *)hexColorString
                                       jqueryPath:(NSString *)jqueryPath
                                       imageWidth:(CGFloat)imgWidth
@@ -167,7 +153,7 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
 
   dispatch_sync(dispatch_get_main_queue(), ^{
     if (!colorString) {
-      UIView *v =[self topViewController].view;
+      UIView *v =[UIViewController topViewController].view;
       colorString = [v.backgroundColor hexString];
     }
     NSLog(@"%@", colorString);
