@@ -61,4 +61,25 @@
     return [self _colorFromHex:hexNum];
 }
 
+
+
+-(NSString *)hexString {
+  
+  if (!self) return nil;
+  if (self == [UIColor whiteColor]) return @"#ffffff";
+  
+  CGFloat red, blue, green, alpha;
+  [self getRed:&red green:&green blue:&blue alpha:&alpha];
+  
+  NSUInteger redDec =   (NSUInteger)(red   * 255);
+  NSUInteger greenDec = (NSUInteger)(green * 255);
+  NSUInteger blueDec =  (NSUInteger)(blue  * 255);
+  
+  NSString *returnString = [NSString stringWithFormat:@"#%02x%02x%02x", (unsigned int)redDec, (unsigned int)greenDec, (unsigned int)blueDec];
+  NSLog(@"%@", returnString);
+  return returnString;
+  
+}
+
+
 @end

@@ -10,4 +10,5 @@
 
 @interface UIColor (Creation)
 +(UIColor *)colorFromHexString:(NSString *)hexString;
+-(NSString *)hexString;
 @end
