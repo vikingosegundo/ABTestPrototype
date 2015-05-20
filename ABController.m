@@ -159,6 +159,14 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
     NSLog(@"%@", colorString);
   });
   
+  CGFloat iw = imgWidth;
+  CGFloat ih = imgheight;
+  if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft || [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
+    CGFloat temp = ih;
+    ih = iw;
+    iw = temp;
+  }
+  
   NSString *html = [NSString stringWithFormat:@"<html><head><script type='text/javascript' src='%@'></script></head><body><form action=\"/color/\" method=\"post\" enctype=\"application/x-www-form-urlencoded\">\
                     Select your favorite color:\
                     <input type=\"color\" name=\"color\" value=\"%@\"onchange=\"this.form.submit()\">\
@@ -173,7 +181,7 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                     });\
                     });\
                     });\
-                    </script></body></html>",jqueryPath, colorString,imgWidth, imgheight,imgWidth, imgheight];
+                    </script></body></html>",jqueryPath, colorString,iw, ih,iw, ih];
   return html;
 }
 
@@ -183,6 +191,8 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
   NSString *jqueryPath = [[NSBundle mainBundle] pathForResource:@"jquery" ofType:@"js"];
   CGFloat imgWidth = [[UIScreen mainScreen] bounds].size.width ;
   CGFloat imgheight = [[UIScreen mainScreen] bounds].size.height;
+  
+  
   
   OCFWebServerResponse *(^responseWithViewHierachy)(void) = ^OCFWebServerResponse* {
     return [OCFWebServerDataResponse responseWithText:[[[UIApplication sharedApplication] keyWindow] listOfSubviews]];
@@ -228,6 +238,12 @@ void _ab_notificaction(id self, SEL _cmd, id userObj)
                    NSLog(@"%@", arg);
                    CGFloat x = [arg[@"x"] floatValue];
                    CGFloat y = [arg[@"y"] floatValue];
+                   
+                   if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft || [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
+                     CGFloat temp = x;
+                     x = y;
+                     y = temp;
+                   }
                    NSLog(@"%f, %f", x,y);
                    
                    UIView *v =[[UIApplication sharedApplication].keyWindow.rootViewController.view findTopMostViewForPoint:CGPointMake(x, y)];
